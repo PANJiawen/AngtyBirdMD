@@ -13,6 +13,9 @@ import java.io.*;
 public class AngryBirds extends Panel implements Runnable, MouseListener, MouseMotionListener {
 	Bird my_bird = new Bird();
 	Pig my_pig =  new Pig();
+	Decor dc =  new Decor();
+	Terran tr = new Terran();
+	
 	Gravity g = new Gravity();
 //    double gravity;                             // gravité
     int mouseX, mouseY;                         // position de la souris lors de la sélection
@@ -157,9 +160,11 @@ public class AngryBirds extends Panel implements Runnable, MouseListener, MouseM
         g.fillRect(0, 0, getWidth(), getHeight());
 
         // décor
+        dc.draw(g);
+        tr.draw(g);
         g.setColor(Color.BLACK);
-        g.drawLine(0, 500, 800, 500);
-        g.drawLine(100, 500, 100, 400);
+//        g.drawLine(0, 500, 800, 500);
+       //g.drawLine(100, 500, 100, 400);
 
         // oiseau
         //g.setColor(Color.RED);
