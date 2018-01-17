@@ -2,7 +2,11 @@ package test1;
 
 import java.awt.*;
 import java.awt.geom.*;
+import java.awt.image.BufferedImage;
 import java.util.*;
+
+import javax.swing.JFrame;
+
 import java.awt.event.*;
 import java.io.*;
 
@@ -16,7 +20,21 @@ public class AngryBirds extends Panel implements Runnable, MouseListener, MouseM
     int score;                                  // nombre de fois où le joueur a gagné
     boolean gameOver;                           // vrai lorsque le joueur a touché un bord ou le cochon
     boolean selecting;                          // vrai lorsque le joueur sélectionne l'angle et la vitesse
-    Image buffer;                               // image pour le rendu hors écran
+    Image buffer;
+    
+//    //BufferedImage bufferI;
+//    
+//    
+//    
+//    JFrame jf = new JFrame();
+//    MyCanvas mc = new MyCanvas();
+    
+    
+    
+    
+    
+    
+    // image pour le rendu hors écran
 
     // calcule la distance entre deux points
     static double distance(double x1, double y1, double x2, double y2) {
@@ -152,8 +170,9 @@ public class AngryBirds extends Panel implements Runnable, MouseListener, MouseM
 //        g.fillOval((int) birdX - 20, (int) birdY - 20, 40, 40);
 
         // cochon
-        g.setColor(Color.GREEN);
-        g.fillOval((int) my_pig.getPigX() - 20, (int) my_pig.getPigY() - 20, 40, 40);
+        my_pig.draw(g);
+//        g.setColor(Color.GREEN);
+//        g.fillOval((int) my_pig.getPigX() - 20, (int) my_pig.getPigY() - 20, 40, 40);
 
         // messages
         g.setColor(Color.BLACK);
