@@ -1,5 +1,6 @@
 package test1;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -7,12 +8,15 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class Decor {
+public class DirectionManager {
 
+
+	
 	BufferedImage bufferI;
 	
-    public Decor () {
-    	File f = new File ("./images (2).gif");
+	
+    public DirectionManager () {
+    	File f = new File ("./angrybirds.png");
     	
     	try {
 			this.bufferI =  ImageIO.read(f);
@@ -23,10 +27,14 @@ public class Decor {
        	
     }
     
-    public void draw(Graphics2D g) {
+    public void draw(Graphics2D g,int birdx,int birdy, int mousex, int mousey) {
     	
 
-  		g.drawImage(bufferI, null, 50, 400);
+    	g.drawLine((int)birdx, (int) birdy, mousex, mousey); 
+//    	g.drawArc(55, 55, 55, 55, mousex, mousey);
+
+
+
   }
 	
 }

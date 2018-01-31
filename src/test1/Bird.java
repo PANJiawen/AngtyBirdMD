@@ -8,15 +8,26 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class Bird {
-    double birdX, birdY, velocityX, velocityY;  // informations relatives à l'oiseau
+public class Bird extends Element{
+    double x, y, velocityX, velocityY;  // informations relatives à l'oiseau
     BufferedImage bufferI;
+    BufferedImage bufferII;
+    int type = 1;
     
-    public Bird () {
+    public int getType() {
+		return type;
+	}
+	public void setType(int type) {
+		this.type = type;
+	}
+	public Bird () {
+    	
     	File f = new File ("./angrybirds.png");
+    	File f2 = new File ("./bird3.png");
     	
     	try {
 			this.bufferI =  ImageIO.read(f);
+			this.bufferII =  ImageIO.read(f2);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -28,23 +39,30 @@ public class Bird {
     	//g.setColor(Color.RED);
 
         //g.fillOval(((int) getBirdX()) - 20, ((int) getBirdY()) - 20, 40, 40);
-    	g.drawImage(bufferI, null, ((int) getBirdX())-65, ((int) getBirdY()) -100);
+    	if (type == 1) {
+    		g.drawImage(bufferI, null, ((int) getX())-65, ((int) getY()) -100);
+    	}else if (type == 2){
+    		g.drawImage(bufferII,null,((int) getX())-65, ((int) getY()) -100);
+    	}
+    	
     }
     
-	public double getBirdX() {
-		return birdX;
+    
+    
+	public double getX() {
+		return x;
 	}
 
-	public void setBirdX(double birdX) {
-		this.birdX = birdX;
+	public void setX(double x) {
+		this.x = x;
 	}
 
-	public double getBirdY() {
-		return birdY;
+	public double getY() {
+		return y;
 	}
 
-	public void setBirdY(double birdY) {
-		this.birdY = birdY;
+	public void setY(double y) {
+		this.y = y;
 	}
 
 	public double getVelocityX() {
@@ -62,4 +80,10 @@ public class Bird {
 	public void setVelocityY(double velocityY) {
 		this.velocityY = velocityY;
 	}
+	
+	public int CollisionWith(Element e) { 
+		
+		return type=2;
+		}
+	
 }

@@ -13,7 +13,7 @@ public class Terran {
 	BufferedImage bufferI;
 	
     public Terran () {
-    	File f = new File ("./terre1.jpg");
+    	File f = new File ("./background.png");
     	
     	try {
 			this.bufferI =  ImageIO.read(f);
@@ -27,6 +27,6 @@ public class Terran {
     public void draw(Graphics2D g) {
     	
 
-  		g.drawImage(bufferI, null,0, 500);
+  		g.drawImage(bufferI, null,0,110);
   }
 }

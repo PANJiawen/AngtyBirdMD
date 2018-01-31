@@ -4,54 +4,44 @@ import java.awt.*;
 import java.awt.geom.*;
 import java.awt.image.BufferedImage;
 import java.util.*;
-
 import javax.swing.JFrame;
-
 import java.awt.event.*;
 import java.io.*;
 
 public class AngryBirds extends Panel implements Runnable, MouseListener, MouseMotionListener {
 	Bird my_bird = new Bird();
-	Pig my_pig =  new Pig();
+//	Pig pig1 =  new Pig();
+//	Pig pig2 =  new Pig();
+
+	int nb_pigs;
+	ArrayList <Pig> pigs;
+	CollisionManager collision = new CollisionManager();
 	Decor dc =  new Decor();
 	Terran tr = new Terran();
-	
-	Gravity g = new Gravity();
-//    double gravity;                             // gravité
+	DirectionManager dm =  new  DirectionManager();
+	Gravity g = new Gravity();                             // gravité
     int mouseX, mouseY;                         // position de la souris lors de la sélection
     String message;                             // message à afficher en haut de l'écran
     int score;                                  // nombre de fois où le joueur a gagné
     boolean gameOver;                           // vrai lorsque le joueur a touché un bord ou le cochon
     boolean selecting;                          // vrai lorsque le joueur sélectionne l'angle et la vitesse
     Image buffer;
-    
-//    //BufferedImage bufferI;
-//    
-//    
-//    
-//    JFrame jf = new JFrame();
-//    MyCanvas mc = new MyCanvas();
-    
-    
-    
-    
-    
-    
-    // image pour le rendu hors écran
 
     // calcule la distance entre deux points
-    static double distance(double x1, double y1, double x2, double y2) {
-        double dx = x1 - x2;
-        double dy = y1 - y2;
-        return Math.sqrt(dx * dx + dy * dy);
-    }
 
+    
     // constructeur
     AngryBirds() {
         g.setGravity(0.1);
         score = 0;
         addMouseListener(this);
         addMouseMotionListener(this);
+        
+        nb_pigs = calcule.nombre();
+        pigs = new ArrayList<Pig>();
+        
+        for (int i = 0; i < nb_pigs; i++) 
+        	pigs.add(new Pig());       
         init();
         new Thread(this).start();
     }
@@ -65,10 +55,8 @@ public class AngryBirds extends Panel implements Runnable, MouseListener, MouseM
         if(gameOver) {
             init();
         } else if(selecting) {
-        	my_bird.setVelocityX((my_bird.getBirdX() - mouseX) / 20.0);
-            //velocityX = (birdX - mouseX) / 20.0;
-        	my_bird.setVelocityY((my_bird.getBirdY()- mouseY)/20.0);
-//            velocityY = (birdY - mouseY) / 20.0;
+        	my_bird.setVelocityX((my_bird.getX() - mouseX) / 20.0);
+        	my_bird.setVelocityY((my_bird.getY()- mouseY)/20.0);
             message = "L'oiseau prend sont envol";
             selecting = false;
         }
@@ -85,18 +73,36 @@ public class AngryBirds extends Panel implements Runnable, MouseListener, MouseM
     void init() {
         gameOver = false;
         selecting = true;
-        my_bird.setBirdX(100);
-        my_bird.setBirdY(400);
+        my_bird.setX(100);
+        my_bird.setY(400);
         my_bird.setVelocityX(0);
-        my_bird.setVelocityY(0);
-        my_pig.setPigX(Math.random() * 500 + 200);
-        my_pig.setPigY(480);
-//        birdX = 100;
-//        birdY = 400;
-//        velocityX = 0;
-//        velocityY = 0;
-//        pigX = Math.random() * 500 + 200; // position aléatoire pour le cochon
-//        pigY = 480;
+        my_bird.setVelocityY(0);       
+        collision.addElement(my_bird);
+        
+        for (int i = 0; i < nb_pigs; i++) {
+        	pigs.get(i).setX(Math.random() * 500 + 200);
+        	pigs.get(i).setY(480);
+        	
+        	collision.addElement(pigs.get(i));
+        }
+        //pig1.setX(Math.random() * 500 + 200);
+        //pig1.setY(480);
+        //pig2.setX(Math.random() * 500 + 200);
+        //pig2.setY(480);
+        //pigs.add(pig1);
+        //pigs.add(pig2);
+        
+//        System.out.println("breake");
+//        for (int i = 1; i <= clc.nombre();i++) {
+//        	System.out.println(i);
+//        	
+//        	
+//        	
+//            pig1.setX(Math.random() * 500 + 200);
+//            pig1.setY(480);
+//        }
+        
+        
         message = "Choisissez l'angle et la vitesse.";
     }
 
@@ -104,8 +110,6 @@ public class AngryBirds extends Panel implements Runnable, MouseListener, MouseM
     void stop() {
     	my_bird.setVelocityX(0);
     	my_bird.setVelocityY(0);
-//        velocityX = 0;
-//        velocityY = 0;
         gameOver = true;
     }
 
@@ -118,23 +122,23 @@ public class AngryBirds extends Panel implements Runnable, MouseListener, MouseM
             if(!gameOver && !selecting) {
 
                 // moteur physique
-            	my_bird.setBirdX(my_bird.getBirdX()+my_bird.getVelocityX());
-            	my_bird.setBirdY(my_bird.getBirdY()+my_bird.getVelocityY());
+            	my_bird.setX(my_bird.getX()+my_bird.getVelocityX());
+            	my_bird.setY(my_bird.getY()+my_bird.getVelocityY());
             	my_bird.setVelocityY(my_bird.getVelocityY()+g.getGravity());
-//                birdX += velocityX;
-//                birdY += velocityY;
-//                velocityY += gravity;
 
                 // conditions de victoire
-            	if(distance(my_bird.getBirdX(), my_bird.getBirdY(), my_pig.getPigX(), my_pig.getPigY()) < 35) {
-//                	if(distance(my_bird.getBirdX(), my_bird.getBirdY(), pigX, pigY) < 35) {
-//                if(distance(birdX, birdY, pigX, pigY) < 35) {
-                    stop();
+            	if (collision.checkCollision() == 1) {
+            		stop();
+                	
                     message = "Gagné : cliquez pour recommencer.";
                     score++;
-                } else if(my_bird.getBirdX() < 20 || my_bird.getBirdX() > 780 || 
-                		my_bird.getBirdY() < 0 || my_bird.getBirdY() > 480) {
-//                } else if(birdX < 20 || birdX > 780 || birdY < 0 || birdY > 480) {
+            	}
+//            	if(calcule.distance(my_bird.getX(), my_bird.getY(), pig1.getX(), pig1.getY()) < 65
+//            			||calcule.distance(my_bird.getX(), my_bird.getY(), pig2.getX(), pig2.getY()) < 65) {
+//
+//                } 
+            	else if(my_bird.getX() < 20 || my_bird.getX() > 780 || 
+                		my_bird.getY() < 0 || my_bird.getY() > 480) {
                     stop();
                     message = "Perdu : cliquez pour recommencer.";
                 }
@@ -158,26 +162,25 @@ public class AngryBirds extends Panel implements Runnable, MouseListener, MouseM
         // fond
         g.setColor(Color.WHITE);
         g.fillRect(0, 0, getWidth(), getHeight());
+        tr.draw(g);
 
         // décor
         dc.draw(g);
-        tr.draw(g);
+        
         g.setColor(Color.BLACK);
-//        g.drawLine(0, 500, 800, 500);
-       //g.drawLine(100, 500, 100, 400);
 
-        // oiseau
-        //g.setColor(Color.RED);
-        if(selecting) g.drawLine((int)my_bird.getBirdX(), (int) my_bird.getBirdY(), mouseX, mouseY); // montre l'angle et la vitesse
+        if(selecting)
+        	{
+        	dm.draw(g, (int)my_bird.getX(), (int) my_bird.getY(), mouseX, mouseY);
+        	}
         my_bird.draw(g);
-        //g.fillOval(((int) my_bird.getBirdX()) - 20, ((int) my_bird.getBirdY()) - 20, 40, 40);
-//        if(selecting) g.drawLine((int) birdX, (int) birdY, mouseX, mouseY); // montre l'angle et la vitesse
-//        g.fillOval((int) birdX - 20, (int) birdY - 20, 40, 40);
-
         // cochon
-        my_pig.draw(g);
-//        g.setColor(Color.GREEN);
-//        g.fillOval((int) my_pig.getPigX() - 20, (int) my_pig.getPigY() - 20, 40, 40);
+        
+//        pig1.draw(g);
+//        pig2.draw(g);
+        
+        for (int i = 0; i < nb_pigs; i++)
+        	pigs.get(i).draw(g);
 
         // messages
         g.setColor(Color.BLACK);
@@ -205,5 +208,6 @@ public class AngryBirds extends Panel implements Runnable, MouseListener, MouseM
         frame.add(obj);
         frame.pack();
         frame.setVisible(true);
+        frame.setResizable(false);
     }
 }

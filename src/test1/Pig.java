@@ -8,9 +8,9 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class Pig {
+public class Pig extends Element{
 	
-	double pigX, pigY;
+	double x, y;
 	BufferedImage bufferI;
 	
     public Pig () {
@@ -26,27 +26,28 @@ public class Pig {
     }
 	
 
-	public double getPigX() {
-		return pigX;
-	}
+
 
     public void draw(Graphics2D g) {
     	
 //        g.setColor(Color.GREEN);
 //        g.fillOval((int) getPigX() - 20, (int) getPigY() - 20, 40, 40);
-    		g.drawImage(bufferI, null, ((int) getPigX())-65, ((int) getPigY()) -100);
+    		g.drawImage(bufferI, null, ((int) getX())-65, ((int) getY()) -100);
     }
-	
-	public void setPigX(double pigX) {
-		this.pigX = pigX;
+
+	public double getX() {
+		return x;
+	}
+	public void setX(double x) {
+		this.x = x;
 	}
 
-	public double getPigY() {
-		return pigY;
+	public double getY() {
+		return y;
 	}
 
-	public void setPigY(double pigY) {
-		this.pigY = pigY;
+	public void setY(double y) {
+		this.y = y;
 	}
 	
 }
