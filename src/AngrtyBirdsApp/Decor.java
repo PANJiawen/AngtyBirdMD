@@ -1,6 +1,5 @@
-package test1;
+package AngrtyBirdsApp;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -8,15 +7,12 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class DirectionManager {
+public class  Decor extends Element {
 
-
-	
 	BufferedImage bufferI;
 	
-	
-    public DirectionManager () {
-    	File f = new File ("./angrybirds.png");
+    public Decor () {
+    	File f = new File ("./images (2).gif");
     	
     	try {
 			this.bufferI =  ImageIO.read(f);
@@ -27,14 +23,10 @@ public class DirectionManager {
        	
     }
     
-    public void draw(Graphics2D g,int birdx,int birdy, int mousex, int mousey) {
+    public void draw(Graphics2D g) {
     	
 
-    	g.drawLine((int)birdx, (int) birdy, mousex, mousey); 
-//    	g.drawArc(55, 55, 55, 55, mousex, mousey);
-
-
-
+  		g.drawImage(bufferI, null, 50, 400);
   }
 	
 }

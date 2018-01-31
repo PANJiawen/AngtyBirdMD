@@ -1,35 +1,34 @@
-package test1;
+package AngrtyBirdsApp;
 
 import java.awt.*;
 import java.awt.geom.*;
 import java.awt.image.BufferedImage;
 import java.util.*;
 import javax.swing.JFrame;
+
 import java.awt.event.*;
 import java.io.*;
 
 public class AngryBirds extends Panel implements Runnable, MouseListener, MouseMotionListener {
-	Bird my_bird = new Bird();
-//	Pig pig1 =  new Pig();
-//	Pig pig2 =  new Pig();
 
-	int nb_pigs;
-	ArrayList <Pig> pigs;
+	IElementFactory ef = new ElementFactory();
+	
+	Element ebird = ef.createBird();
+	Element dc =  ef.createDecor();
+	Element tr = ef.createTerran();
+	Element g = ef.createGravity(); 
+	ArrayList <Element> pigs;
+	
+	int nb_pigs;	
 	CollisionManager collision = new CollisionManager();
-	Decor dc =  new Decor();
-	Terran tr = new Terran();
 	DirectionManager dm =  new  DirectionManager();
-	Gravity g = new Gravity();                             // gravité
     int mouseX, mouseY;                         // position de la souris lors de la sélection
     String message;                             // message à afficher en haut de l'écran
     int score;                                  // nombre de fois où le joueur a gagné
     boolean gameOver;                           // vrai lorsque le joueur a touché un bord ou le cochon
     boolean selecting;                          // vrai lorsque le joueur sélectionne l'angle et la vitesse
     Image buffer;
-
-    // calcule la distance entre deux points
-
-    
+ 
     // constructeur
     AngryBirds() {
         g.setGravity(0.1);
@@ -37,11 +36,12 @@ public class AngryBirds extends Panel implements Runnable, MouseListener, MouseM
         addMouseListener(this);
         addMouseMotionListener(this);
         
+        ef.createBird();
         nb_pigs = calcule.nombre();
-        pigs = new ArrayList<Pig>();
+        pigs = new ArrayList<Element>();
         
         for (int i = 0; i < nb_pigs; i++) 
-        	pigs.add(new Pig());       
+        	pigs.add(ef.createPig());       
         init();
         new Thread(this).start();
     }
@@ -55,8 +55,8 @@ public class AngryBirds extends Panel implements Runnable, MouseListener, MouseM
         if(gameOver) {
             init();
         } else if(selecting) {
-        	my_bird.setVelocityX((my_bird.getX() - mouseX) / 20.0);
-        	my_bird.setVelocityY((my_bird.getY()- mouseY)/20.0);
+        	ebird.setVelocityX((ebird.getX() - mouseX) / 20.0);
+        	ebird.setVelocityY((ebird.getY()- mouseY)/20.0);
             message = "L'oiseau prend sont envol";
             selecting = false;
         }
@@ -73,11 +73,11 @@ public class AngryBirds extends Panel implements Runnable, MouseListener, MouseM
     void init() {
         gameOver = false;
         selecting = true;
-        my_bird.setX(100);
-        my_bird.setY(400);
-        my_bird.setVelocityX(0);
-        my_bird.setVelocityY(0);       
-        collision.addElement(my_bird);
+        ebird.setX(100);
+        ebird.setY(400);
+        ebird.setVelocityX(0);
+        ebird.setVelocityY(0);       
+        collision.addElement(ebird);
         
         for (int i = 0; i < nb_pigs; i++) {
         	pigs.get(i).setX(Math.random() * 500 + 200);
@@ -85,31 +85,14 @@ public class AngryBirds extends Panel implements Runnable, MouseListener, MouseM
         	
         	collision.addElement(pigs.get(i));
         }
-        //pig1.setX(Math.random() * 500 + 200);
-        //pig1.setY(480);
-        //pig2.setX(Math.random() * 500 + 200);
-        //pig2.setY(480);
-        //pigs.add(pig1);
-        //pigs.add(pig2);
-        
-//        System.out.println("breake");
-//        for (int i = 1; i <= clc.nombre();i++) {
-//        	System.out.println(i);
-//        	
-//        	
-//        	
-//            pig1.setX(Math.random() * 500 + 200);
-//            pig1.setY(480);
-//        }
-        
-        
+
         message = "Choisissez l'angle et la vitesse.";
     }
 
     // fin de partie
     void stop() {
-    	my_bird.setVelocityX(0);
-    	my_bird.setVelocityY(0);
+    	ebird.setVelocityX(0);
+    	ebird.setVelocityY(0);
         gameOver = true;
     }
 
@@ -122,9 +105,9 @@ public class AngryBirds extends Panel implements Runnable, MouseListener, MouseM
             if(!gameOver && !selecting) {
 
                 // moteur physique
-            	my_bird.setX(my_bird.getX()+my_bird.getVelocityX());
-            	my_bird.setY(my_bird.getY()+my_bird.getVelocityY());
-            	my_bird.setVelocityY(my_bird.getVelocityY()+g.getGravity());
+            	ebird.setX(ebird.getX()+ebird.getVelocityX());
+            	ebird.setY(ebird.getY()+ebird.getVelocityY());
+            	ebird.setVelocityY(ebird.getVelocityY()+g.getGravity());
 
                 // conditions de victoire
             	if (collision.checkCollision() == 1) {
@@ -133,12 +116,9 @@ public class AngryBirds extends Panel implements Runnable, MouseListener, MouseM
                     message = "Gagné : cliquez pour recommencer.";
                     score++;
             	}
-//            	if(calcule.distance(my_bird.getX(), my_bird.getY(), pig1.getX(), pig1.getY()) < 65
-//            			||calcule.distance(my_bird.getX(), my_bird.getY(), pig2.getX(), pig2.getY()) < 65) {
-//
-//                } 
-            	else if(my_bird.getX() < 20 || my_bird.getX() > 780 || 
-                		my_bird.getY() < 0 || my_bird.getY() > 480) {
+
+            	else if(ebird.getX() < 20 || ebird.getX() > 780 || 
+            			ebird.getY() < 0 || ebird.getY() > 480) {
                     stop();
                     message = "Perdu : cliquez pour recommencer.";
                 }
@@ -171,14 +151,11 @@ public class AngryBirds extends Panel implements Runnable, MouseListener, MouseM
 
         if(selecting)
         	{
-        	dm.draw(g, (int)my_bird.getX(), (int) my_bird.getY(), mouseX, mouseY);
+        	dm.draw(g, (int)ebird.getX(), (int) ebird.getY(), mouseX, mouseY);
         	}
-        my_bird.draw(g);
+        ebird.draw(g);
         // cochon
-        
-//        pig1.draw(g);
-//        pig2.draw(g);
-        
+     
         for (int i = 0; i < nb_pigs; i++)
         	pigs.get(i).draw(g);
 

@@ -1,4 +1,4 @@
-package test1;
+package AngrtyBirdsApp;
 
 import java.util.ArrayList;
 import java.util.Collection;

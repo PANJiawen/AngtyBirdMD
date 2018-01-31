@@ -1,4 +1,4 @@
-package test1;
+package AngrtyBirdsApp;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -7,12 +7,13 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class Decor {
+public class Terran extends Element{
 
+	
 	BufferedImage bufferI;
 	
-    public Decor () {
-    	File f = new File ("./images (2).gif");
+    public Terran () {
+    	File f = new File ("./background.png");
     	
     	try {
 			this.bufferI =  ImageIO.read(f);
@@ -26,7 +27,6 @@ public class Decor {
     public void draw(Graphics2D g) {
     	
 
-  		g.drawImage(bufferI, null, 50, 400);
+  		g.drawImage(bufferI, null,0,110);
   }
-	
 }

@@ -1,6 +1,6 @@
-package test1;
+package AngrtyBirdsApp;
 
-public class Gravity {
+public class Gravity extends Element{
 	double gravity;
 
 	public double getGravity() {

@@ -1,5 +1,6 @@
-package test1;
+package AngrtyBirdsApp;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -7,13 +8,15 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class Terran {
+public class DirectionManager {
+
 
 	
 	BufferedImage bufferI;
 	
-    public Terran () {
-    	File f = new File ("./background.png");
+	
+    public DirectionManager () {
+    	File f = new File ("./angrybirds.png");
     	
     	try {
 			this.bufferI =  ImageIO.read(f);
@@ -24,9 +27,14 @@ public class Terran {
        	
     }
     
-    public void draw(Graphics2D g) {
+    public void draw(Graphics2D g,int birdx,int birdy, int mousex, int mousey) {
     	
 
-  		g.drawImage(bufferI, null,0,110);
+    	g.drawLine((int)birdx, (int) birdy, mousex, mousey); 
+
+
+
+
   }
+	
 }

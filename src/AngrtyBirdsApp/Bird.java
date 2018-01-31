@@ -1,4 +1,4 @@
-package test1;
+package AngrtyBirdsApp;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -36,9 +36,6 @@ public class Bird extends Element{
     }
     public void draw(Graphics2D g) {
     	
-    	//g.setColor(Color.RED);
-
-        //g.fillOval(((int) getBirdX()) - 20, ((int) getBirdY()) - 20, 40, 40);
     	if (type == 1) {
     		g.drawImage(bufferI, null, ((int) getX())-65, ((int) getY()) -100);
     	}else if (type == 2){
